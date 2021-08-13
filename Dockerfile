@@ -20,6 +20,7 @@ RUN apt-get -y install \
     libmcrypt-dev \
     libreadline-dev \
     libfreetype6-dev \
+    libmagickwand-dev \
 	libzip-dev \
 	libonig-dev \
     g++
@@ -39,6 +40,12 @@ RUN docker-php-ext-install \
     mbstring \
     pdo_mysql \
     zip
+
+# install imagick
+# Version is not officially released https://pecl.php.net/get/imagick but following works for PHP 8
+RUN mkdir -p /usr/src/php/ext/imagick; \
+    curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1; \
+    docker-php-ext-install imagick;
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd
